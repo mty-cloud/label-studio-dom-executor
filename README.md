@@ -139,3 +139,22 @@ install_bookmarklet.html
 ## 2026-07 修复说明：下一任务逻辑
 
 当前版本的下一任务逻辑已改为：Submit 后等待页面状态更新，然后从当前可见任务列表自上而下扫描，点击第一个 completed/annotations_count 为 0 的任务行。桌面端超时时间已提升到 30 秒。严格不要恢复坐标点击、历史 next_row 或 row_delta_y 递推。
+
+## GitHub / 下载 Windows EXE
+
+```text
+远程仓库：https://github.com/mty-cloud/label-studio-dom-executor
+```
+
+每次推送到 `main` 分支，GitHub Actions 会自动编译成 `.exe` 文件：
+
+1. 打开 https://github.com/mty-cloud/label-studio-dom-executor/actions
+2. 点击最新一次成功的工作流
+3. 在页面底部找到 **Artifacts**，点击下载 `LabelStudio助手-Windows-x64.zip`
+4. 解压后运行 `LabelStudio助手.exe`
+
+要创建发行版（Release）版本，打 tag 推送：
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
