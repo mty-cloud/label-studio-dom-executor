@@ -1,0 +1,17 @@
+{
+  "bridge": {
+    "host": "127.0.0.1",
+    "port": 17892,
+    "command_timeout_ms": 40000,
+    "poll_interval_ms": 350
+  },
+  "execution": {
+    "auto_submit": true,
+    "auto_next": true,
+    "delay_after_choice_ms": 120,
+    "delay_after_remark_ms": 150,
+    "delay_after_add_ms": 250,
+    "delay_after_submit_ms": 1500,
+    "wait_completed_timeout_ms": 18000
+  }
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>安装 LS连接器</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 40px; line-height: 1.7; }
+    .bookmarklet { display:inline-block; padding:12px 18px; background:#2563eb; color:white; border-radius:8px; text-decoration:none; font-weight:600; }
+    .box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:18px; margin:18px 0; }
+    code { background:#f1f5f9; padding:2px 5px; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <h1>Label Studio DOM 模板助手：安装 LS连接器</h1>
+  <div class="box">
+    <p><strong>先启动桌面工具</strong>，然后把下面这个按钮拖到浏览器收藏栏/个人收藏栏。</p>
+    <p><a class="bookmarklet" href="javascript:(()=>{if(window.__LS_BRIDGE_LOADER__)return;window.__LS_BRIDGE_LOADER__=true;var t=setTimeout(function(){alert('LS连接器加载失败：请先启动桌面工具')},3000);window.addEventListener('message',function LSmsg(e){if(e.data&&e.data.type==='ls_bridge_code'){clearTimeout(t);window.removeEventListener('message',LSmsg);if(e.data.error){alert(e.data.message);return}var s=document.createElement('script');s.textContent=e.data.code;document.documentElement.appendChild(s)}});var f=document.createElement('iframe');f.style.display='none';f.src='http://127.0.0.1:17892/bridge/loader?ts='+Date.now();document.body.appendChild(f)})()">LS连接器</a></p>
+  </div>
+  <h2>Safari 用户</h2>
+  <ol>
+    <li>菜单栏点击：<code>显示 → 显示个人收藏栏</code>。</li>
+    <li>用鼠标按住上面的 <strong>LS连接器</strong> 按钮，拖到个人收藏栏。</li>
+    <li>打开 Label Studio 具体任务页后，点击收藏栏里的 <strong>LS连接器</strong>。</li>
+  </ol>
+  <h2>如果拖不上去</h2>
+  <ol>
+    <li>新建任意书签。</li>
+    <li>把书签名称改成 <code>LS连接器</code>。</li>
+    <li>把书签地址替换为项目文件 <code>bridge/bookmarklet.txt</code> 中的整段 <code>javascript:</code> 代码。</li>
+  </ol>
+</body>
+</html>

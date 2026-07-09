@@ -1,0 +1,2 @@
+# Standard-library first project. No required third-party packages.
+# Python >= 3.9 recommended.

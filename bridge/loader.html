@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>LS Bridge Loader</title>
+</head>
+<body>
+<script>
+// 这个页面运行在 http://127.0.0.1:17892 的 iframe 中
+// 同源 fetch 获取桥接代码（无混合内容问题）
+// 然后通过 postMessage 发送给 HTTPS 父页面
+(function() {
+  var ts = Date.now();
+  fetch('/bridge/ls_dom_executor_bridge.js?ts=' + ts)
+    .then(function(r) { return r.text(); })
+    .then(function(code) {
+      window.parent.postMessage({ type: 'ls_bridge_code', code: code }, '*');
+    })
+    .catch(function(err) {
+      window.parent.postMessage({
+        type: 'ls_bridge_code',
+        error: true,
+        message: 'LS连接器加载失败：请先启动桌面工具'
+      }, '*');
+    });
+})();
+</script>
+</body>
+</html>
