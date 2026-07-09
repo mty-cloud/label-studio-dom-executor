@@ -5,9 +5,15 @@ import queue
 import sys
 import threading
 import time
+import webbrowser
 import tkinter as tk
 from pathlib import Path
 from tkinter import messagebox, simpledialog, ttk
+
+# Ensure src/ is in path for sibling module imports
+_src_dir = str(Path(__file__).resolve().parent)
+if _src_dir not in sys.path:
+    sys.path.insert(0, _src_dir)
 
 from local_bridge_server import LocalBridgeServer
 from template_manager import TemplateManager
@@ -182,6 +188,9 @@ class LabelStudioDomExecutorApp(tk.Tk):
             side=tk.LEFT
         )
         ttk.Button(
+            top, text="打开 Web UI", command=self._open_web_ui
+        ).pack(side=tk.RIGHT, padx=(0, 6))
+        ttk.Button(
             top, text="复制书签安装说明", command=self._show_bookmarklet_help
         ).pack(side=tk.RIGHT)
 
@@ -289,13 +298,27 @@ class LabelStudioDomExecutorApp(tk.Tk):
         try:
             self.bridge_server.start()
             cfg = self.settings.get("bridge", {})
+            host = cfg.get("host", "127.0.0.1")
+            port = cfg.get("port", 17892)
             self._log(
-                f"本地桥接服务已启动：http://{cfg.get('host', '127.0.0.1')}:{cfg.get('port', 17892)}"
+                f"本地桥接服务已启动：http://{host}:{port}"
             )
+            self._log(f"🌐 Web UI: http://{host}:{port}/web/")
             self._log("请在 Label Studio 任务页点击浏览器收藏栏里的『LS连接器』。")
+
+            # 自动打开 Web UI
+            webbrowser.open(f"http://{host}:{port}/web/")
         except OSError as e:
             messagebox.showerror("启动失败", f"本地桥接服务启动失败：{e}")
             raise
+
+    def _open_web_ui(self) -> None:
+        cfg = self.settings.get("bridge", {})
+        host = cfg.get("host", "127.0.0.1")
+        port = cfg.get("port", 17892)
+        url = f"http://{host}:{port}/web/"
+        webbrowser.open(url)
+        self._log(f"已打开 Web UI: {url}")
 
     def _show_bookmarklet_help(self) -> None:
         messagebox.showinfo(
@@ -303,7 +326,7 @@ class LabelStudioDomExecutorApp(tk.Tk):
             "1. 打开项目里的 install_bookmarklet.html\n"
             "2. 将页面中的『LS连接器』拖到浏览器收藏栏\n"
             "3. 打开 Label Studio 具体任务页\n"
-            "4. 点击收藏栏『LS连接器』，桌面工具显示已连接后即可使用。",
+            "4. 点击收藏栏『LS连接器』，状态连接后即可使用 Web UI。",
         )
 
     # ===================== 模板列表 =====================

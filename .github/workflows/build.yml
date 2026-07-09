@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
-  workflow_dispatch:  # 手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,9 +26,10 @@ jobs:
         shell: cmd
         run: |
           pyinstaller --onefile --windowed --noconsole ^
-            --name "LabelStudio助手" ^
+            --name "LS标注助手" ^
             --add-data "bridge;bridge" ^
             --add-data "config;config" ^
+            --add-data "webui;webui" ^
             --add-data "install_bookmarklet.html;." ^
             --add-data "README.md;." ^
             --add-data "STAFF_QUICK_START.md;." ^
@@ -38,28 +39,25 @@ jobs:
             --hidden-import "http.server" ^
             --hidden-import "urllib.parse" ^
             --hidden-import "mimetypes" ^
-            src/main.py
+            src/server.py
 
-      - name: 打包完整使用包（.exe + 浏览器安装说明）
+      - name: 打包完整使用包（.exe + 安装说明）
         shell: cmd
         run: |
           copy install_bookmarklet.html dist\
           copy README.md dist\
           copy STAFF_QUICK_START.md dist\
           copy bridge\bookmarklet.txt dist\
-          mkdir dist\bridge
-          copy bridge\bookmarklet.txt dist\bridge\
-          dir dist\
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
-          name: LabelStudio助手-Windows-x64
+          name: LS标注助手-Windows-x64
           path: dist/*
 
       - name: 创建 Release（有 tag 才触发）
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/LabelStudio助手.exe
+          files: dist/LS标注助手.exe
           generate_release_notes: true

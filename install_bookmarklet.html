@@ -2,31 +2,170 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>安装 LS连接器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LS 标注助手 — 安装说明</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 40px; line-height: 1.7; }
-    .bookmarklet { display:inline-block; padding:12px 18px; background:#2563eb; color:white; border-radius:8px; text-decoration:none; font-weight:600; }
-    .box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:18px; margin:18px 0; }
-    code { background:#f1f5f9; padding:2px 5px; border-radius:4px; }
+    :root {
+      --bg: #0f1419;
+      --panel: rgba(30, 41, 59, 0.7);
+      --border: rgba(255,255,255,0.08);
+      --primary: #059669;
+      --primary-hover: #10b981;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 24px;
+      line-height: 1.7;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 8px; }
+    h2 { font-size: 1.2rem; margin: 24px 0 12px; }
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .bookmarklet-link {
+      display: inline-block;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #047857, #059669);
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 8px 0;
+      transition: all 0.2s;
+    }
+    .bookmarklet-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+    }
+    .webui-link {
+      display: inline-block;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 8px 0;
+      transition: all 0.2s;
+    }
+    .webui-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    }
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    ol, ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .tag-new { background: #059669; color: white; }
+    .tag-legacy { background: #6b7280; color: white; }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
   </style>
 </head>
 <body>
-  <h1>Label Studio DOM 模板助手：安装 LS连接器</h1>
-  <div class="box">
-    <p><strong>先启动桌面工具</strong>，然后把下面这个按钮拖到浏览器收藏栏/个人收藏栏。</p>
-    <p><a class="bookmarklet" href="javascript:(()=>{if(window.__LS_BRIDGE_LOADER__)return;window.__LS_BRIDGE_LOADER__=true;var t=setTimeout(function(){alert('LS连接器加载失败：请先启动桌面工具')},3000);window.addEventListener('message',function LSmsg(e){if(e.data&&e.data.type==='ls_bridge_code'){clearTimeout(t);window.removeEventListener('message',LSmsg);if(e.data.error){alert(e.data.message);return}var s=document.createElement('script');s.textContent=e.data.code;document.documentElement.appendChild(s)}});var f=document.createElement('iframe');f.style.display='none';f.src='http://127.0.0.1:17892/bridge/loader?ts='+Date.now();document.body.appendChild(f)})()">LS连接器</a></p>
+  <h1>🚀 LS 标注助手</h1>
+  <p style="color: var(--text-secondary); margin-bottom: 24px;">
+    在浏览器和桌面之间桥接 Label Studio 标注操作，一键填充、提交、跳转。
+  </p>
+
+  <!-- ═══ 方式一：Web UI（推荐）═══ -->
+  <div class="card">
+    <h2>🌐 方式一：Web UI <span class="tag tag-new">推荐</span></h2>
+    <p>桌面工具启动后，浏览器会自动打开 <strong>Web 管理界面</strong>，操作更直观：</p>
+    <ul>
+      <li>🎨 现代界面设计，明暗主题</li>
+      <li>📋 模板拖拽管理，一键执行</li>
+      <li>📡 通过 API 自动查找下一任务（LS 版本升级也不受影响）</li>
+      <li>⚡ 无需安装任何软件，浏览器即可操作</li>
+    </ul>
+    <p style="margin-top: 12px;">
+      👉 启动桌面工具后，访问：
+      <br>
+      <a class="webui-link" href="http://127.0.0.1:17892/web/" target="_blank">http://127.0.0.1:17892/web/</a>
+    </p>
   </div>
-  <h2>Safari 用户</h2>
-  <ol>
-    <li>菜单栏点击：<code>显示 → 显示个人收藏栏</code>。</li>
-    <li>用鼠标按住上面的 <strong>LS连接器</strong> 按钮，拖到个人收藏栏。</li>
-    <li>打开 Label Studio 具体任务页后，点击收藏栏里的 <strong>LS连接器</strong>。</li>
-  </ol>
-  <h2>如果拖不上去</h2>
-  <ol>
-    <li>新建任意书签。</li>
-    <li>把书签名称改成 <code>LS连接器</code>。</li>
-    <li>把书签地址替换为项目文件 <code>bridge/bookmarklet.txt</code> 中的整段 <code>javascript:</code> 代码。</li>
-  </ol>
+
+  <!-- ═══ 方式二：Bookmarklet（必要） ═══ -->
+  <div class="card">
+    <h2>🔖 方式二：安装 LS连接器 <span class="tag tag-legacy">必要</span></h2>
+    <p>无论使用 Web UI 还是旧版桌面工具，<strong>都必须安装此书签</strong>，用于在 LS 页面注入桥接脚本。</p>
+    <p style="margin-top: 12px;">
+      <strong>第一步：</strong>确认桌面工具已启动（桥接服务器运行在 port 17892）
+    </p>
+    <p>
+      <strong>第二步：</strong>把下面这个按钮<strong>拖到</strong>浏览器收藏栏：
+    </p>
+    <p>
+      <a class="bookmarklet-link" href="javascript:(()=>{if(window.__LS_BRIDGE_LOADER__)return;window.__LS_BRIDGE_LOADER__=true;var t=setTimeout(function(){alert('LS连接器加载失败：请先启动桌面工具')},3000);window.addEventListener('message',function LSmsg(e){if(e.data&&e.data.type==='ls_bridge_code'){clearTimeout(t);window.removeEventListener('message',LSmsg);if(e.data.error){alert(e.data.message);return}var s=document.createElement('script');s.textContent=e.data.code;document.documentElement.appendChild(s)}});var f=document.createElement('iframe');f.style.display='none';f.src='http://127.0.0.1:17892/bridge/loader?ts='+Date.now();document.body.appendChild(f)})()">🔌 LS连接器</a>
+    </p>
+    <p><strong>第三步：</strong>打开 Label Studio 具体任务页，点击收藏栏的 <strong>LS连接器</strong>。</p>
+    <p><strong>第四步（可选）：</strong>回到 Web UI 页面，状态栏显示「已连接」即可操作。</p>
+  </div>
+
+  <div class="card">
+    <h2>🔄 使用流程</h2>
+    <ol>
+      <li>启动桌面工具（自动打开 Web UI）</li>
+      <li>在 LS 标注页点击书签栏「LS连接器」</li>
+      <li>在 Web UI 中选择备注模板点击执行</li>
+      <li>工具自动完成：选择不符合 → 填备注 → Add → Submit → 跳转下一任务</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>📖 浏览器兼容说明</h2>
+    <h3>Safari</h3>
+    <ol>
+      <li>菜单栏点击：<code>显示 → 显示个人收藏栏</code>。</li>
+      <li>用鼠标按住「LS连接器」拖到个人收藏栏。</li>
+    </ol>
+    <h3>Chrome / Edge</h3>
+    <ol>
+      <li>确保书签栏可见（Ctrl+Shift+B / Cmd+Shift+B）。</li>
+      <li>将「LS连接器」拖到书签栏。</li>
+    </ol>
+    <h3>如果拖不上去</h3>
+    <ol>
+      <li>新建任意书签。</li>
+      <li>名称设为 <code>LS连接器</code>。</li>
+      <li>URL 替换为项目 <code>bridge/bookmarklet.txt</code> 中的整段 <code>javascript:</code> 代码。</li>
+    </ol>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center;">
+    LS 标注助手 v2.1 — Web UI + API 驱动导航
+  </p>
 </body>
 </html>

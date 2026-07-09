@@ -11,17 +11,25 @@
 // 然后通过 postMessage 发送给 HTTPS 父页面
 (function() {
   var ts = Date.now();
-  fetch('/bridge/ls_dom_executor_bridge.js?ts=' + ts)
+  fetch('/bridge/ls_dom_executor_bridge_v2.js?ts=' + ts)
     .then(function(r) { return r.text(); })
     .then(function(code) {
       window.parent.postMessage({ type: 'ls_bridge_code', code: code }, '*');
     })
     .catch(function(err) {
-      window.parent.postMessage({
-        type: 'ls_bridge_code',
-        error: true,
-        message: 'LS连接器加载失败：请先启动桌面工具'
-      }, '*');
+      // Fallback to v1 if v2 not found
+      return fetch('/bridge/ls_dom_executor_bridge.js?ts=' + ts)
+        .then(function(r) { return r.text(); })
+        .then(function(code) {
+          window.parent.postMessage({ type: 'ls_bridge_code', code: code }, '*');
+        })
+        .catch(function(err2) {
+          window.parent.postMessage({
+            type: 'ls_bridge_code',
+            error: true,
+            message: 'LS连接器加载失败：请先启动桌面工具'
+          }, '*');
+        });
     });
 })();
 </script>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LS 标注助手</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ═══ 顶部状态栏 ═══ -->
+  <header class="status-bar" id="statusBar">
+    <div class="status-left">
+      <div class="status-indicator" id="statusDot"></div>
+      <span class="status-text" id="statusText">桥接状态：未连接</span>
+      <span class="status-divider">|</span>
+      <span class="status-task" id="statusTask">task: -</span>
+      <span class="status-divider">|</span>
+      <span class="status-project" id="statusProject">project: -</span>
+    </div>
+    <div class="status-right">
+      <button class="btn-icon" id="themeToggle" title="切换主题">☀️</button>
+      <button class="btn-icon" id="settingsBtn" title="设置">⚙️</button>
+      <button class="btn-outline" id="helpBtn">📖 帮助</button>
+    </div>
+  </header>
+
+  <!-- ═══ 执行模式 ═══ -->
+  <section class="exec-mode-bar" id="execModeBar">
+    <label class="toggle-label">
+      <input type="checkbox" id="autoSubmit" checked>
+      <span class="toggle-switch"></span>
+      自动 Submit
+    </label>
+    <label class="toggle-label">
+      <input type="checkbox" id="autoNext" checked>
+      <span class="toggle-switch"></span>
+      Submit 后自动进入下一任务
+    </label>
+    <span class="mode-hint">网页操作由 LS连接器在页面内部完成，不使用坐标点击</span>
+  </section>
+
+  <!-- ═══ 主体面板 ═══ -->
+  <main class="main-panels">
+    <!-- 左侧：模板管理 -->
+    <section class="panel panel-left" id="panelLeft">
+      <div class="panel-header">
+        <h2>📋 模板管理</h2>
+        <div class="panel-actions">
+          <button class="btn-icon-sm" id="templateRefresh" title="刷新">🔄</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="template-list-container" id="templateListContainer">
+          <div class="template-item" data-index="0">
+            <span class="template-drag">⠿</span>
+            <span class="template-text">说话内容有误</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-primary" id="executeBtn">▶ 执行选中</button>
+        <button class="btn btn-ghost" id="addBtn">+ 新增</button>
+        <button class="btn btn-ghost" id="editBtn">✏ 修改</button>
+        <button class="btn btn-ghost" id="deleteBtn">✕ 删除</button>
+        <button class="btn btn-ghost" id="moveUpBtn">↑ 上移</button>
+        <button class="btn btn-ghost" id="moveDownBtn">↓ 下移</button>
+      </div>
+    </section>
+
+    <!-- 右侧：快速执行 -->
+    <section class="panel panel-right" id="panelRight">
+      <div class="panel-header">
+        <h2>⚡ 快速执行</h2>
+        <span class="badge" id="templateCount">0 个模板</span>
+      </div>
+      <div class="panel-body" id="quickBtnContainer">
+        <!-- Quick buttons rendered by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ 日志面板 ═══ -->
+  <section class="log-panel" id="logPanel">
+    <div class="log-header">
+      <h3>📝 执行日志</h3>
+      <button class="btn-icon-sm" id="logClearBtn" title="清空">🗑️</button>
+    </div>
+    <div class="log-body" id="logBody">
+      <div class="log-entry log-info">
+        <span class="log-time">等待服务...</span>
+        <span class="log-msg"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 设置弹窗 ═══ -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h2>⚙️ 设置</h2>
+        <button class="btn-icon-sm modal-close" data-modal="settingsModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>桥接服务端口</label>
+          <input type="number" id="settingBridgePort" value="17892" class="input">
+        </div>
+        <div class="form-group">
+          <label>命令超时 (ms)</label>
+          <input type="number" id="settingTimeout" value="40000" class="input">
+        </div>
+        <hr>
+        <div class="form-group">
+          <label>Label Studio 服务器地址</label>
+          <input type="url" id="settingLsUrl" placeholder="http://115.191.32.74:30014" class="input">
+        </div>
+        <div class="form-group">
+          <label>LS API Token</label>
+          <input type="password" id="settingLsToken" placeholder="输入 API Token" class="input">
+          <span class="form-hint">可在 LS 用户设置页面获取</span>
+        </div>
+        <div class="form-group" id="settingApiStatus">
+          <span class="status-badge status-unknown">未检测</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="settingTestBtn">📡 测试连接</button>
+        <button class="btn btn-primary" id="settingSaveBtn">💾 保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 模板编辑弹窗 ═══ -->
+  <div class="modal-overlay" id="templateModal">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h2 id="templateModalTitle">新增模板</h2>
+        <button class="btn-icon-sm modal-close" data-modal="templateModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>备注模板内容</label>
+          <textarea id="templateModalText" rows="3" class="input" placeholder="输入备注模板文字..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost modal-close" data-modal="templateModal">取消</button>
+        <button class="btn btn-primary" id="templateModalSave">💾 保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
